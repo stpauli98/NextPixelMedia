@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Montserrat, Poppins } from 'next/font/google'
 import '@/styles/globals.css'
 import { SmoothScroll } from '@/components/layout/SmoothScroll'
+import { Nav } from '@/components/layout/Nav'
+import { Footer } from '@/components/layout/Footer'
 
 const montserrat = Montserrat({
   subsets: ['latin', 'latin-ext'],
@@ -27,7 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="bs" className={`${montserrat.variable} ${poppins.variable}`}>
       <body className="bg-black text-white antialiased">
-        <SmoothScroll>{children}</SmoothScroll>
+        <SmoothScroll>
+          <Nav />
+          {children}
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   )
