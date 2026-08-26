@@ -41,14 +41,14 @@ export function Footer() {
 
       <div className="mt-[4vw] flex items-center justify-between border-t border-white/10 pt-[1.5vw] max-md:mt-[12vw] max-md:flex-col max-md:gap-[3vw] max-md:pt-[5vw]">
         <span className="font-body text-[0.75vw] max-md:text-[2.8vw] text-gray">
-          © 2026 NextPixel Media. Sva prava zadržana.
+          {tekstovi.chrome.footer.copyright}
         </span>
         <div className="flex gap-[1.5vw] max-md:gap-[5vw]">
           <Link href="/uslovi" className="font-body text-[0.75vw] max-md:text-[2.8vw] text-gray hover:text-champagne">
-            Uslovi
+            {tekstovi.chrome.footer.uslovi}
           </Link>
           <Link href="/privatnost" className="font-body text-[0.75vw] max-md:text-[2.8vw] text-gray hover:text-champagne">
-            Privatnost
+            {tekstovi.chrome.footer.privatnost}
           </Link>
         </div>
       </div>

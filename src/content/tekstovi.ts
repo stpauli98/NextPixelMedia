@@ -23,4 +23,31 @@ export const tekstovi = {
   oNama: 'NextPixel Media je media strana NextPixel-a. .dev gradi sajt — mi snimamo ono što na njemu stoji.',
   kontaktHero: 'Dobro došao. Da se upoznamo.',
   kontaktObecanje: 'Javljam se u roku od dva sata.',
+  chrome: {
+    nav: {
+      cta: 'Započni projekat',
+      meniOtvori: 'Meni',
+      meniZatvori: 'Zatvori',
+      logoAria: 'NextPixel Media, početna',
+    },
+    meni: {
+      copyright: '© 2026 NextPixel Media — Gradiška, BA',
+      oznaka: 'Foto · Video · Dron',
+    },
+    footer: {
+      copyright: '© 2026 NextPixel Media. Sva prava zadržana.',
+      uslovi: 'Uslovi',
+      privatnost: 'Privatnost',
+    },
+    nijePronadjeno: {
+      naslov: '404',
+      opis: 'Ova stranica ne postoji.',
+      dugme: 'Nazad na početnu',
+    },
+    greska: {
+      naslov: 'Nešto je puklo',
+      opis: 'Pokušaj ponovo. Ako se ponovi, javi se na nikola@nextpixel.media',
+      dugme: 'Pokušaj ponovo',
+    },
+  },
 } as const
