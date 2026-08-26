@@ -205,8 +205,10 @@ describe('dizajn tokeni', () => {
   })
 
   it('veže font tokene na next/font varijable', () => {
-    expect(css).toContain('--font-display: var(--font-montserrat)')
-    expect(css).toContain('--font-body:    var(--font-poppins)')
+    // Razmaci se normalizuju — formatter ne smije oboriti test.
+    const zbijeno = css.replace(/\s+/g, ' ')
+    expect(zbijeno).toContain('--font-display: var(--font-montserrat)')
+    expect(zbijeno).toContain('--font-body: var(--font-poppins)')
   })
 })
 ```
@@ -762,15 +764,17 @@ function Ugao({ className }: { className: string }) {
   )
 }
 
+// Korijen je div, ne span: Okvir ponekad obavija kartice i druge blok
+// elemente (paketi), a span sa blok djetetom je nevažeći HTML.
 export function Okvir({ children, className = '' }: Props) {
   return (
-    <span className={`group relative inline-block ${className}`}>
+    <div className={`group relative inline-block ${className}`}>
       <Ugao className="top-[-0.4vw] left-[-0.7vw] max-md:top-[-1.2vw] max-md:left-[-2vw] group-hover:-translate-x-[0.2vw] group-hover:-translate-y-[0.2vw]" />
       <Ugao className="top-[-0.4vw] right-[-0.7vw] max-md:top-[-1.2vw] max-md:right-[-2vw] -scale-x-100 group-hover:translate-x-[0.2vw] group-hover:-translate-y-[0.2vw]" />
       <Ugao className="bottom-[-0.4vw] left-[-0.7vw] max-md:bottom-[-1.2vw] max-md:left-[-2vw] -scale-y-100 group-hover:-translate-x-[0.2vw] group-hover:translate-y-[0.2vw]" />
       <Ugao className="bottom-[-0.4vw] right-[-0.7vw] max-md:bottom-[-1.2vw] max-md:right-[-2vw] rotate-180 group-hover:translate-x-[0.2vw] group-hover:translate-y-[0.2vw]" />
       {children}
-    </span>
+    </div>
   )
 }
 ```
@@ -2807,23 +2811,47 @@ export function Filter({ aktivna, promijeni }: Props) {
 
 - [ ] **Step 2: Napiši `src/components/radovi/DragMreza.tsx`**
 
-Beskonačnost dolazi iz `gsap.utils.wrap` — pozicija se omota kad pređe granicu, pa mreža nema kraj.
+Beskonačnost dolazi iz `gsap.utils.wrap`. Ključ je da se **jedna ploča ponovi četiri puta u rasporedu 2×2**, pa omotavanje po obje ose nema šav. Ćelije se pozicioniraju apsolutno, jer tada su širina i visina ploče poznat broj, a ne nešto što se mjeri iz layouta.
 
 ```tsx
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { gsap, Observer } from '@/lib/gsap'
 import { BEZ_REDUKCIJE, useGsap } from '@/lib/useGsap'
 import { slika } from '@/lib/media'
 import type { Rad } from '@/content/tipovi'
 
-const KOLONA = 22 // vw
-const RED = 16 // vw
+// Sve mjere u vw. Korak uključuje razmak, pa ploče naliježu bez šava.
+const DESKTOP = { kolone: 4, sirina: 22, visina: 16, razmak: 1 }
+const MOBILNI = { kolone: 2, sirina: 44, visina: 30, razmak: 2 }
+
+const KOPIJE = [
+  [0, 0],
+  [1, 0],
+  [0, 1],
+  [1, 1],
+] as const
 
 export function DragMreza({ stavke }: { stavke: Rad[] }) {
   const pomak = useRef({ x: 0, y: 0 })
+  const [jeMobilni, postaviMobilni] = useState(false)
+
+  useEffect(() => {
+    const upit = window.matchMedia('(max-width: 767px)')
+    const osvjezi = () => postaviMobilni(upit.matches)
+    osvjezi()
+    upit.addEventListener('change', osvjezi)
+    return () => upit.removeEventListener('change', osvjezi)
+  }, [])
+
+  const r = jeMobilni ? MOBILNI : DESKTOP
+  const korakX = r.sirina + r.razmak
+  const korakY = r.visina + r.razmak
+  const redova = Math.ceil(stavke.length / r.kolone)
+  const plocaSirina = r.kolone * korakX // vw
+  const plocaVisina = redova * korakY // vw
 
   const scope = useGsap<HTMLDivElement>(
     (mm, korijen) => {
@@ -2831,17 +2859,30 @@ export function DragMreza({ stavke }: { stavke: Rad[] }) {
         const platno = korijen.querySelector('[data-platno]') as HTMLElement | null
         if (!platno) return
 
-        const sirina = platno.scrollWidth / 2
-        const visina = platno.scrollHeight / 2
-        const omotajX = gsap.utils.wrap(-sirina, 0)
-        const omotajY = gsap.utils.wrap(-visina, 0)
+        let omotajX = (v: number) => v
+        let omotajY = (v: number) => v
+
+        const izracunaj = () => {
+          const vw = window.innerWidth / 100
+          omotajX = gsap.utils.wrap(-plocaSirina * vw, 0)
+          omotajY = gsap.utils.wrap(-plocaVisina * vw, 0)
+        }
 
         const nacrtaj = () => {
           gsap.set(platno, { x: omotajX(pomak.current.x), y: omotajY(pomak.current.y) })
         }
 
+        const naPromjenuVelicine = () => {
+          izracunaj()
+          nacrtaj()
+        }
+
+        izracunaj()
+        nacrtaj()
+        window.addEventListener('resize', naPromjenuVelicine)
+
         const posmatrac = Observer.create({
-          target: platno,
+          target: korijen,
           type: 'wheel,touch,pointer',
           onChange: (self) => {
             pomak.current.x += self.deltaX * -1
@@ -2850,39 +2891,44 @@ export function DragMreza({ stavke }: { stavke: Rad[] }) {
           },
         })
 
-        nacrtaj()
-        return () => posmatrac.kill()
+        return () => {
+          window.removeEventListener('resize', naPromjenuVelicine)
+          posmatrac.kill()
+        }
       })
     },
-    [stavke.length],
+    [stavke.length, jeMobilni],
   )
 
-  // Dupliramo mrežu po obje ose da omotavanje nema šav.
-  const mreza = [...stavke, ...stavke]
-
   return (
-    <div ref={scope} className="relative h-screen w-full overflow-hidden md:cursor-grab">
-      <div
-        data-platno
-        className="absolute left-0 top-0 grid w-max grid-cols-6 gap-[1vw] max-md:grid-cols-3 max-md:gap-[2vw]"
-      >
-        {mreza.map((rad, i) => (
-          <figure
-            key={`${rad.id}-${i}`}
-            className="group relative overflow-hidden"
-            style={{ width: `${KOLONA}vw`, height: `${RED}vw` }}
-          >
-            <Image
-              src={slika(rad.id, 700, 500)}
-              alt={rad.naslov}
-              fill sizes="22vw" draggable={false}
-              className="object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
-            />
-            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-[0.8vw] font-body text-[0.7vw] uppercase tracking-[0.08em] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 max-md:text-[2.4vw]">
-              {rad.naslov}
-            </figcaption>
-          </figure>
-        ))}
+    <div ref={scope} className="relative h-screen w-full overflow-hidden touch-none md:cursor-grab">
+      <div data-platno className="absolute left-0 top-0 will-change-transform">
+        {KOPIJE.map(([kx, ky]) =>
+          stavke.map((rad, i) => (
+            <figure
+              key={`${kx}-${ky}-${rad.id}`}
+              className="group absolute overflow-hidden"
+              style={{
+                left: `${kx * plocaSirina + (i % r.kolone) * korakX}vw`,
+                top: `${ky * plocaVisina + Math.floor(i / r.kolone) * korakY}vw`,
+                width: `${r.sirina}vw`,
+                height: `${r.visina}vw`,
+              }}
+            >
+              <Image
+                src={slika(rad.id, 700, 500)}
+                alt={rad.naslov}
+                fill
+                sizes={jeMobilni ? '44vw' : '22vw'}
+                draggable={false}
+                className="object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+              />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-[0.8vw] max-md:p-[2vw] font-body text-[0.7vw] max-md:text-[2.4vw] uppercase tracking-[0.08em] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                {rad.naslov}
+              </figcaption>
+            </figure>
+          )),
+        )}
       </div>
     </div>
   )
