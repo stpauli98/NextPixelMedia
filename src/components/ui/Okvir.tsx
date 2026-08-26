@@ -17,10 +17,10 @@ function Ugao({ className }: { className: string }) {
 export function Okvir({ children, className = '' }: Props) {
   return (
     <div className={`group relative inline-block ${className}`}>
-      <Ugao className="top-[-0.4vw] left-[-0.7vw] max-md:top-[-1.2vw] max-md:left-[-2vw] group-hover:-translate-x-[0.2vw] group-hover:-translate-y-[0.2vw]" />
-      <Ugao className="top-[-0.4vw] right-[-0.7vw] max-md:top-[-1.2vw] max-md:right-[-2vw] -scale-x-100 group-hover:translate-x-[0.2vw] group-hover:-translate-y-[0.2vw]" />
-      <Ugao className="bottom-[-0.4vw] left-[-0.7vw] max-md:bottom-[-1.2vw] max-md:left-[-2vw] -scale-y-100 group-hover:-translate-x-[0.2vw] group-hover:translate-y-[0.2vw]" />
-      <Ugao className="bottom-[-0.4vw] right-[-0.7vw] max-md:bottom-[-1.2vw] max-md:right-[-2vw] rotate-180 group-hover:translate-x-[0.2vw] group-hover:translate-y-[0.2vw]" />
+      <Ugao className="top-[-0.4vw] left-[-0.7vw] max-md:top-[-1.2vw] max-md:left-[-2vw] group-hover:-translate-x-[0.2vw] group-hover:-translate-y-[0.2vw] max-md:group-hover:-translate-x-[0.65vw] max-md:group-hover:-translate-y-[0.65vw]" />
+      <Ugao className="top-[-0.4vw] right-[-0.7vw] max-md:top-[-1.2vw] max-md:right-[-2vw] -scale-x-100 group-hover:translate-x-[0.2vw] group-hover:-translate-y-[0.2vw] max-md:group-hover:translate-x-[0.65vw] max-md:group-hover:-translate-y-[0.65vw]" />
+      <Ugao className="bottom-[-0.4vw] left-[-0.7vw] max-md:bottom-[-1.2vw] max-md:left-[-2vw] -scale-y-100 group-hover:-translate-x-[0.2vw] group-hover:translate-y-[0.2vw] max-md:group-hover:-translate-x-[0.65vw] max-md:group-hover:translate-y-[0.65vw]" />
+      <Ugao className="bottom-[-0.4vw] right-[-0.7vw] max-md:bottom-[-1.2vw] max-md:right-[-2vw] rotate-180 group-hover:translate-x-[0.2vw] group-hover:translate-y-[0.2vw] max-md:group-hover:translate-x-[0.65vw] max-md:group-hover:translate-y-[0.65vw]" />
       {children}
     </div>
   )
