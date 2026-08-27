@@ -70,6 +70,8 @@ export function Forma() {
       const nadjene: Record<string, string> = {}
       for (const g of provjera.error.issues) nadjene[String(g.path[0])] = g.message
       postaviGreske(nadjene)
+      postaviPosljednjiUpit(null)
+      postaviStanje('mirno')
       return
     }
 
