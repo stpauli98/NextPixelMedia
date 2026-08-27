@@ -43,6 +43,19 @@ export const tekstovi = {
   radoviHero: { naslov: 'Naš rad.', opis: 'Izbor onoga što smo snimili.' },
   radoviFilter: { labela: 'Filter', sve: 'SVE' },
   oNama: 'NextPixel Media je media strana NextPixel-a. .dev gradi sajt — mi snimamo ono što na njemu stoji.',
+  oNamaStranica: {
+    labelaProces: 'Šest faza svakog posla',
+    labelaEkipa: 'Ekipa',
+    dugmeUsluge: 'Vidi usluge',
+  },
+  usloviStranica: {
+    labela: 'Uslovi',
+    naslov: 'Uslovi saradnje',
+  },
+  privatnostStranica: {
+    labela: 'Privatnost',
+    naslov: 'Privatnost',
+  },
   kontaktHero: 'Dobro došao. Da se upoznamo.',
   kontaktObecanje: 'Javljam se u roku od dva sata.',
   kontaktForma: {
