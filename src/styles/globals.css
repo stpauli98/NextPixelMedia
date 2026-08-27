@@ -35,3 +35,5 @@ html {
   letter-spacing: -0.05em;
   line-height: 0.85;
 }
+
+.linija { overflow: hidden; }
