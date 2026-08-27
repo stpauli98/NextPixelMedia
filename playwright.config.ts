@@ -1,15 +1,18 @@
 import { defineConfig } from '@playwright/test'
 
-// Port 3000 je zauzet nevezanim procesom na ovoj mašini; dev server za ovaj
-// projekat već radi na 3117 (vidi zadatak), pa Playwright cilja na njega.
-// `reuseExistingServer: true` znači da se postojeći server ponovo koristi
-// ako već radi, a pokreće novi (na istom portu) ako ne.
+// Port se čita iz okruženja (PORT), sa 3000 kao podrazumijevanim — nijedan
+// port nije "ispravan" sam po sebi, samo zavisi šta je slobodno na mašini
+// koja pokreće testove. `PORT=3117 npm run test:e2e` gađa dev server koji
+// već radi na 3117 na ovoj mašini.
+const port = process.env.PORT ?? 3000
+
 export default defineConfig({
   testDir: './e2e',
-  use: { baseURL: 'http://localhost:3117' },
+  use: { baseURL: `http://localhost:${port}` },
   webServer: {
-    command: 'npx next dev -p 3117',
-    url: 'http://localhost:3117',
-    reuseExistingServer: true,
+    command: `npx next dev -p ${port}`,
+    url: `http://localhost:${port}`,
+    // U CI-ju stari server ne smije prikriti regresiju — uvijek pokreni svježi.
+    reuseExistingServer: !process.env.CI,
   },
 })
