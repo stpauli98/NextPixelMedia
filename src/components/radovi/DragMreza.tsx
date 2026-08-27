@@ -3,13 +3,16 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { gsap, Observer } from '@/lib/gsap'
-import { BEZ_REDUKCIJE, useGsap } from '@/lib/useGsap'
+import { useGsap } from '@/lib/useGsap'
 import { slika } from '@/lib/media'
 import type { Rad } from '@/content/tipovi'
 
 // Sve mjere u vw. Korak uključuje razmak, pa ploče naliježu bez šava.
-const DESKTOP = { kolone: 4, sirina: 22, visina: 16, razmak: 1 }
-const MOBILNI = { kolone: 2, sirina: 44, visina: 30, razmak: 2 }
+// kolone × (sirina + razmak) mora biti ≥ 100 na X osi, inače dva
+// susjedna kopija ploče ne pokriju cijeli ekran i pri svakom punom
+// ciklusu omotavanja proviri prazna traka.
+const DESKTOP = { kolone: 5, sirina: 20, visina: 15, razmak: 1 } // ploča: 105vw širine
+const MOBILNI = { kolone: 3, sirina: 32, visina: 22, razmak: 2 } // ploča: 102vw širine
 
 const KOPIJE = [
   [0, 0],
@@ -18,9 +21,20 @@ const KOPIJE = [
   [1, 1],
 ] as const
 
+// Korak tastature, u vw — pretvara se u piksele u trenutku pritiska.
+const KORAK_TIPKE_VW = 10
+
+const SMJER_TIPKE: Record<string, readonly [number, number]> = {
+  ArrowLeft: [1, 0],
+  ArrowRight: [-1, 0],
+  ArrowUp: [0, 1],
+  ArrowDown: [0, -1],
+}
+
 export function DragMreza({ stavke }: { stavke: Rad[] }) {
   const pomak = useRef({ x: 0, y: 0 })
   const [jeMobilni, postaviMobilni] = useState(false)
+  const [visinaVw, postaviVisinuVw] = useState(0)
 
   useEffect(() => {
     const upit = window.matchMedia('(max-width: 767px)')
@@ -30,16 +44,42 @@ export function DragMreza({ stavke }: { stavke: Rad[] }) {
     return () => upit.removeEventListener('change', osvjezi)
   }, [])
 
+  // Visina prozora izražena u vw (relativno prema širini) — koristi se
+  // da ploča bude dovoljno visoka i kad filter ostavi svega par stavki.
+  useEffect(() => {
+    const osvjezi = () => postaviVisinuVw(window.innerHeight / (window.innerWidth / 100))
+    osvjezi()
+    window.addEventListener('resize', osvjezi)
+    return () => window.removeEventListener('resize', osvjezi)
+  }, [])
+
   const r = jeMobilni ? MOBILNI : DESKTOP
   const korakX = r.sirina + r.razmak
   const korakY = r.visina + r.razmak
-  const redova = Math.ceil(stavke.length / r.kolone)
+  const redovaSadrzaja = stavke.length > 0 ? Math.ceil(stavke.length / r.kolone) : 0
+  // Rijetki filter (npr. SPORT sa dvije stavke) inače daje jedan nizak red —
+  // ploča ispadne niža od ekrana i korisnik zapadne u prazninu iz koje nema
+  // povratka jer je platno overflow-hidden. Zato se broj redova diže na
+  // najmanju vrijednost koja stvarno pokriva visinu prozora.
+  const minRedova = visinaVw > 0 ? Math.ceil(visinaVw / korakY) : redovaSadrzaja
+  const redova = Math.max(redovaSadrzaja, minRedova)
   const plocaSirina = r.kolone * korakX // vw
   const plocaVisina = redova * korakY // vw
 
+  // Popuni cijelu ploču ponavljanjem stavki po modulu — i višak redova
+  // iznad broja stavki, i nepotpun zadnji red — umjesto praznih ćelija.
+  const celije =
+    stavke.length > 0
+      ? Array.from({ length: redova * r.kolone }, (_, i) => stavke[i % stavke.length])
+      : []
+
   const scope = useGsap<HTMLDivElement>(
     (mm, korijen) => {
-      mm.add(BEZ_REDUKCIJE, () => {
+      // Namjerno bez geste za reducirani pokret: ovo nije animacija nego
+      // jedini način da se korisnik kreće po galeriji (gsap.set je trenutan,
+      // ništa se ne animira). Ko je isključio pokret ne smije ostati
+      // zaglavljen bez ijedne interakcije na jedinoj stranici sa radovima.
+      mm.add('all', () => {
         const platno = korijen.querySelector('[data-platno]') as HTMLElement | null
         if (!platno) return
 
@@ -75,22 +115,43 @@ export function DragMreza({ stavke }: { stavke: Rad[] }) {
           },
         })
 
+        // Tastatura vozi istu pomak/omotaj cijev kao pokazivač — bez ovoga
+        // je jedini popis radova studija nedostupan bez miša ili dodira.
+        const naTastaturu = (e: KeyboardEvent) => {
+          const smjer = SMJER_TIPKE[e.key]
+          if (!smjer) return
+          e.preventDefault()
+          const korak = (window.innerWidth / 100) * KORAK_TIPKE_VW
+          pomak.current.x += smjer[0] * korak
+          pomak.current.y += smjer[1] * korak
+          nacrtaj()
+        }
+        korijen.addEventListener('keydown', naTastaturu)
+
         return () => {
           window.removeEventListener('resize', naPromjenuVelicine)
+          korijen.removeEventListener('keydown', naTastaturu)
           posmatrac.kill()
         }
       })
     },
-    [stavke.length, jeMobilni],
+    [stavke.length, jeMobilni, redova],
   )
 
   return (
-    <div ref={scope} className="relative h-screen w-full overflow-hidden touch-none md:cursor-grab">
+    <div
+      ref={scope}
+      tabIndex={0}
+      className="relative h-screen w-full overflow-hidden touch-none md:cursor-grab focus-visible:outline focus-visible:outline-2 focus-visible:outline-champagne focus-visible:outline-offset-[-4px]"
+    >
       <div data-platno className="absolute left-0 top-0 will-change-transform">
         {KOPIJE.map(([kx, ky]) =>
-          stavke.map((rad, i) => (
+          celije.map((rad, i) => (
             <figure
-              key={`${kx}-${ky}-${rad.id}`}
+              key={`${kx}-${ky}-${i}`}
+              // Svaki rad postoji jednom po redu i četiri puta po ploči (KOPIJE) —
+              // bez ovoga čitač ekrana isti portfolio pročita i po nekoliko puta.
+              aria-hidden={!(kx === 0 && ky === 0 && i < stavke.length)}
               className="group absolute overflow-hidden"
               style={{
                 left: `${kx * plocaSirina + (i % r.kolone) * korakX}vw`,
@@ -103,7 +164,7 @@ export function DragMreza({ stavke }: { stavke: Rad[] }) {
                 src={slika(rad.id, 700, 500)}
                 alt={rad.naslov}
                 fill
-                sizes={jeMobilni ? '44vw' : '22vw'}
+                sizes={`${r.sirina}vw`}
                 draggable={false}
                 className="object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
               />

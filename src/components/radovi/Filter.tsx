@@ -12,7 +12,7 @@ export function Filter({ aktivna, promijeni }: Props) {
 
   return (
     <div className="fixed bottom-[2vw] left-1/2 z-50 -translate-x-1/2 border border-white/15 bg-black/85 px-[1.5vw] py-[1vw] backdrop-blur max-md:bottom-[4vw] max-md:w-[88vw] max-md:px-[4vw] max-md:py-[4vw]">
-      <Labela>{tekstovi.radoviFilter}</Labela>
+      <Labela>{tekstovi.radoviFilter.labela}</Labela>
       <div className="mt-[0.6vw] max-md:mt-[3vw] flex flex-wrap gap-[0.5vw] max-md:gap-[2vw]">
         {opcije.map((opcija) => (
           <button
@@ -21,7 +21,7 @@ export function Filter({ aktivna, promijeni }: Props) {
               aktivna === opcija ? 'bg-champagne text-black' : 'text-gray hover:text-white'
             }`}
           >
-            {opcija}
+            {opcija === 'SVE' ? tekstovi.radoviFilter.sve : opcija}
           </button>
         ))}
       </div>
