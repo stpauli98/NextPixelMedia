@@ -1,10 +1,10 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Labela } from '@/components/ui/Labela'
 import { Okvir } from '@/components/ui/Okvir'
 import {
-  OZNAKE_TIPA, OZNAKE_UPOTREBE, TIPOVI, UPOTREBE, upitShema,
+  OZNAKE_TIPA, OZNAKE_UPOTREBE, TIPOVI, UPOTREBE, upitShema, type Upit,
 } from '@/lib/shema'
 import { tekstovi } from '@/content/tekstovi'
 
@@ -15,12 +15,34 @@ const t = tekstovi.kontaktForma
 const polje =
   'w-full bg-transparent border-b border-white/20 py-[0.6vw] max-md:py-[3vw] font-body text-[1vw] max-md:text-[4vw] text-white placeholder:text-gray/60 focus:border-champagne focus:outline-none'
 
+// Isti oblik teksta kao serverski tijeloEmaila u route.ts, za mailto fallback.
+function mailtoHref(upit: Upit): string {
+  const naslov = `Upit sa sajta — ${OZNAKE_TIPA[upit.tip]} — ${upit.ime}`
+  const tijelo = [
+    `Tip: ${OZNAKE_TIPA[upit.tip]}`,
+    `Ime: ${upit.ime}`,
+    `Kontakt: ${upit.kontakt}`,
+    `Kada i gdje: ${upit.kadaGdje || '—'}`,
+    `Upotreba: ${upit.upotreba.map((u) => OZNAKE_UPOTREBE[u]).join(', ')}`,
+    '',
+    upit.poruka || '(bez poruke)',
+  ].join('\n')
+
+  return `mailto:${tekstovi.cta.email}?subject=${encodeURIComponent(naslov)}&body=${encodeURIComponent(tijelo)}`
+}
+
 export function Forma() {
   const otvorenoU = useRef(Date.now())
+  const uspjehRef = useRef<HTMLDivElement>(null)
   const [tip, postaviTip] = useState<(typeof TIPOVI)[number]>('firma')
   const [upotreba, postaviUpotrebu] = useState<string[]>([])
   const [stanje, postaviStanje] = useState<Stanje>('mirno')
   const [greske, postaviGreske] = useState<Record<string, string>>({})
+  const [posljednjiUpit, postaviPosljednjiUpit] = useState<Upit | null>(null)
+
+  useEffect(() => {
+    if (stanje === 'poslato') uspjehRef.current?.focus()
+  }, [stanje])
 
   function prebaci(vrijednost: string) {
     postaviUpotrebu((prosli) =>
@@ -52,6 +74,7 @@ export function Forma() {
     }
 
     postaviGreske({})
+    postaviPosljednjiUpit(provjera.data)
     postaviStanje('salje')
 
     try {
@@ -68,7 +91,12 @@ export function Forma() {
 
   if (stanje === 'poslato') {
     return (
-      <div className="border border-champagne/30 p-[3vw] max-md:p-[8vw]">
+      <div
+        ref={uspjehRef}
+        tabIndex={-1}
+        aria-live="polite"
+        className="border border-champagne/30 p-[3vw] max-md:p-[8vw] focus:outline-none"
+      >
         <p className="naslov text-[2.5vw] max-md:text-[8vw] text-champagne">{t.primljeno}</p>
         <p className="mt-[1vw] max-md:mt-[4vw] font-body text-[1vw] max-md:text-[4vw] text-white">
           {tekstovi.kontaktObecanje}
@@ -82,11 +110,11 @@ export function Forma() {
       <fieldset className="border border-white/10 p-[1.5vw] max-md:p-[5vw]">
         <Labela>{t.brojevi[0]}</Labela>
         <legend className="sr-only">{t.sta.legenda}</legend>
-        <p className="naslov mt-[0.4vw] text-[1.6vw] max-md:text-[6vw] text-white">{t.sta.naslov}</p>
+        <p className="naslov mt-[0.4vw] max-md:mt-[1.5vw] text-[1.6vw] max-md:text-[6vw] text-white">{t.sta.naslov}</p>
         <div className="mt-[1vw] max-md:mt-[4vw] flex flex-wrap gap-[0.6vw] max-md:gap-[2.5vw]">
           {TIPOVI.map((tp) => (
             <button
-              key={tp} type="button" onClick={() => postaviTip(tp)}
+              key={tp} type="button" onClick={() => postaviTip(tp)} aria-pressed={tip === tp}
               className={`px-[1vw] py-[0.5vw] max-md:px-[4vw] max-md:py-[2.5vw] font-body text-[0.8vw] max-md:text-[3.2vw] uppercase tracking-[0.08em] transition-colors ${
                 tip === tp ? 'bg-champagne text-black' : 'border border-white/20 text-gray hover:text-white'
               }`}
@@ -104,12 +132,14 @@ export function Forma() {
       ].map((p) => (
         <div key={p.ime} className="border border-white/10 p-[1.5vw] max-md:p-[5vw]">
           <Labela>{p.br}</Labela>
-          <label htmlFor={p.ime} className="naslov mt-[0.4vw] block text-[1.6vw] max-md:text-[6vw] text-white">
+          <label htmlFor={p.ime} className="naslov mt-[0.4vw] max-md:mt-[1.5vw] block text-[1.6vw] max-md:text-[6vw] text-white">
             {p.naslov}{p.obavezno && <span className="text-champagne">*</span>}
           </label>
           <input id={p.ime} name={p.ime} className={`${polje} mt-[0.6vw] max-md:mt-[3vw]`} placeholder={t.placeholder} />
           {greske[p.ime] && (
-            <p className="mt-[0.4vw] font-body text-[0.75vw] max-md:text-[3vw] text-champagne">{greske[p.ime]}</p>
+            <p role="alert" className="mt-[0.4vw] max-md:mt-[1.6vw] font-body text-[0.75vw] max-md:text-[3vw] text-champagne">
+              {greske[p.ime]}
+            </p>
           )}
         </div>
       ))}
@@ -117,13 +147,13 @@ export function Forma() {
       <fieldset className="border border-white/10 p-[1.5vw] max-md:p-[5vw]">
         <Labela>{t.brojevi[4]}</Labela>
         <legend className="sr-only">{t.gdje.legenda}</legend>
-        <p className="naslov mt-[0.4vw] text-[1.6vw] max-md:text-[6vw] text-white">
+        <p className="naslov mt-[0.4vw] max-md:mt-[1.5vw] text-[1.6vw] max-md:text-[6vw] text-white">
           {t.gdje.naslov}<span className="text-champagne">*</span>
         </p>
         <div className="mt-[1vw] max-md:mt-[4vw] flex flex-wrap gap-[0.6vw] max-md:gap-[2.5vw]">
           {UPOTREBE.map((u) => (
             <button
-              key={u} type="button" onClick={() => prebaci(u)}
+              key={u} type="button" onClick={() => prebaci(u)} aria-pressed={upotreba.includes(u)}
               className={`px-[1vw] py-[0.5vw] max-md:px-[4vw] max-md:py-[2.5vw] font-body text-[0.8vw] max-md:text-[3.2vw] uppercase tracking-[0.08em] transition-colors ${
                 upotreba.includes(u) ? 'bg-champagne text-black' : 'border border-white/20 text-gray hover:text-white'
               }`}
@@ -133,13 +163,15 @@ export function Forma() {
           ))}
         </div>
         {greske.upotreba && (
-          <p className="mt-[0.6vw] font-body text-[0.75vw] max-md:text-[3vw] text-champagne">{greske.upotreba}</p>
+          <p role="alert" className="mt-[0.6vw] max-md:mt-[2.4vw] font-body text-[0.75vw] max-md:text-[3vw] text-champagne">
+            {greske.upotreba}
+          </p>
         )}
       </fieldset>
 
       <div className="border border-white/10 p-[1.5vw] max-md:p-[5vw]">
         <Labela>{t.brojevi[5]}</Labela>
-        <label htmlFor="poruka" className="naslov mt-[0.4vw] block text-[1.6vw] max-md:text-[6vw] text-white">
+        <label htmlFor="poruka" className="naslov mt-[0.4vw] max-md:mt-[1.5vw] block text-[1.6vw] max-md:text-[6vw] text-white">
           {t.poruka}
         </label>
         <textarea id="poruka" name="poruka" rows={4} className={`${polje} mt-[0.6vw] max-md:mt-[3vw] resize-none`} placeholder={t.placeholder} />
@@ -161,9 +193,14 @@ export function Forma() {
       </div>
 
       {stanje === 'greska' && (
-        <p className="font-body text-[0.9vw] max-md:text-[3.5vw] text-champagne">
+        <p role="alert" className="font-body text-[0.9vw] max-md:text-[3.5vw] text-champagne">
           {t.greska}{' '}
-          <a href={`mailto:${tekstovi.cta.email}`} className="underline">{tekstovi.cta.email}</a>
+          <a
+            href={posljednjiUpit ? mailtoHref(posljednjiUpit) : `mailto:${tekstovi.cta.email}`}
+            className="underline"
+          >
+            {tekstovi.cta.email}
+          </a>
         </p>
       )}
     </form>
