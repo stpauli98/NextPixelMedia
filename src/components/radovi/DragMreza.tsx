@@ -34,7 +34,13 @@ const SMJER_TIPKE: Record<string, readonly [number, number]> = {
 export function DragMreza({ stavke }: { stavke: Rad[] }) {
   const pomak = useRef({ x: 0, y: 0 })
   const [jeMobilni, postaviMobilni] = useState(false)
-  const [visinaVw, postaviVisinuVw] = useState(0)
+  // Lijeno čitanje iz window-a već na prvi render (uz SSR stražu) — bez
+  // ovoga minRedova kreće od 0, pa se rijedak filter pri učitavanju vidno
+  // "iskoči" na pravu visinu tek nakon prvog efekta, uz nepotreban
+  // rušenje/podizanje Observer-a, resize i tastature.
+  const [visinaVw, postaviVisinuVw] = useState(() =>
+    typeof window === 'undefined' ? 0 : window.innerHeight / (window.innerWidth / 100),
+  )
 
   useEffect(() => {
     const upit = window.matchMedia('(max-width: 767px)')
@@ -105,9 +111,14 @@ export function DragMreza({ stavke }: { stavke: Rad[] }) {
         nacrtaj()
         window.addEventListener('resize', naPromjenuVelicine)
 
+        // Bez 'wheel': Observer ne gasi preventDefault (ostaje passive), pa bi
+        // wheel istovremeno pomjerao platno I skrolovao stranicu (Lenis) ispod
+        // njega — u par notch-eva stranica prođe kroz galeriju i pomjeranje
+        // više nije ni dostupno. Wheel sad samo skroluje, kao na svakoj drugoj
+        // stranici; pomjeranje ostaje na drag, dodir i strelice.
         const posmatrac = Observer.create({
           target: korijen,
-          type: 'wheel,touch,pointer',
+          type: 'touch,pointer',
           onChange: (self) => {
             pomak.current.x += self.deltaX * -1
             pomak.current.y += self.deltaY * -1
