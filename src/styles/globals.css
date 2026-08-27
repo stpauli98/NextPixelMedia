@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-black:     #0B1018;
+  --color-navy:      #1E3A5F;
+  --color-champagne: #C6A96B;
+  --color-cream:     #F8F6F0;
+  --color-white:     #F5F5F3;
+  --color-gray:      #8A919B;
+
+  --font-display: var(--font-montserrat), system-ui, sans-serif;
+  --font-body:    var(--font-poppins), system-ui, sans-serif;
+}
+
+@keyframes marqueeLijevo {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes marqueeDesno {
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+html {
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-body);
+}
+
+.naslov {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+}
+
+/* MarqueeSlika i Proces animiraju preko inline style (CSS keyframes, ne
+   GSAP), pa ne prolaze kroz useGsap-ov motion gate. Ovo je jedino mjesto
+   koje zaustavlja te dvije beskonačne trake za posjetioce sa isključenim
+   pokretom. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-traka {
+    animation-play-state: paused !important;
+  }
+}

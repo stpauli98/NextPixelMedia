@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.superpowers
+.env
+.env.local
+.DS_Store
+e2e/snimci
+test-results
+playwright-report
+*.tsbuildinfo
+.vercel

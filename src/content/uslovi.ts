@@ -1,0 +1,16 @@
+export const uslovi = [
+  { naslov: 'Rezervacija termina', tekst: 'Termin je rezervisan nakon uplate avansa. Avans za evente iznosi 50%, za ostale poslove 30–50% zavisno od vrijednosti.' },
+  { naslov: 'Otkazivanje', tekst: 'Otkazivanje više od 14 dana prije termina — avans se vraća u cijelosti. Od 7 do 14 dana — avans se prenosi na novi termin. Manje od 7 dana — avans se ne vraća. Ako mi otkažemo iz bilo kojeg razloga, avans se vraća u cijelosti.' },
+  { naslov: 'Pomjeranje termina', tekst: 'Jedno pomjeranje je besplatno ako je najavljeno više od 7 dana unaprijed. Svako sljedeće se naplaćuje 100 KM.' },
+  { naslov: 'Vremenski uslovi', tekst: 'Vazdušno (dron) snimanje zavisi od vremenskih uslova i zakonskih ograničenja na lokaciji. Ako let nije moguć, vazdušni dio se nadoknađuje u dodatnom terminu ili se odbija od cijene. Ostatak snimanja se izvodi po planu.' },
+  { naslov: 'Isporuka', tekst: 'Izbor od 10–15 fotografija isporučuje se u roku od 48 sati. Kompletne fotografije u roku od 7 dana, video u roku od 14 dana, računajući od dana snimanja.' },
+  { naslov: 'Broj fotografija', tekst: 'Broj obrađenih fotografija naveden je u ponudi i fiksan je. Dodatne fotografije se mogu naručiti po 10 KM po komadu.' },
+  { naslov: 'Neobrađeni materijal', tekst: 'Neobrađene (RAW) fotografije i sirovi video materijal se ne isporučuju. Obrada je sastavni dio usluge.' },
+  { naslov: 'Korekcije', tekst: 'Uključena je jedna runda korekcija, do 5 fotografija ili jedna izmjena na videu. Primjedbe se dostavljaju u roku od 7 dana od isporuke. Dodatna runda se naplaćuje 100 KM.' },
+  { naslov: 'Prava korištenja', tekst: 'Klijent dobija trajno pravo korištenja isporučenog materijala za vlastite društvene mreže, sajt i marketinške materijale. Korištenje u plaćenom oglašavanju, na bilbordima, u TV kampanjama ili velikom formatu naplaćuje se dodatno (+50%). Preprodaja i ustupanje materijala trećim licima nisu dozvoljeni.' },
+  { naslov: 'Autorska prava', tekst: 'Autorska prava ostaju kod NextPixel Media. Klijent dobija pravo korištenja u gore navedenom obimu.' },
+  { naslov: 'Portfolio', tekst: 'NextPixel Media zadržava pravo korištenja materijala u vlastitom portfoliju i na društvenim mrežama. Kod privatnih proslava i snimaka s djecom dozvola se traži posebno. Klijent može ovo pravo isključiti — dovoljno je da to napomene.' },
+  { naslov: 'Arhiva', tekst: 'Isporučeni materijal se čuva 12 mjeseci, sirovi materijal 3 mjeseca. Preporučujemo da materijal preuzmete i sačuvate kod sebe.' },
+  { naslov: 'Plaćanje', tekst: 'Rok plaćanja je 7 dana od datuma fakture.' },
+  { naslov: 'Odgovornost', tekst: 'Ukupna odgovornost NextPixel Media ograničena je na iznos plaćen za konkretan posao.' },
+] as const
