@@ -106,23 +106,29 @@ export function Preloader() {
   // stabla. aria-hidden samo na samoj zavjesi bi sakrio pogrešnu stvar —
   // ona nema fokusibilan sadržaj, dok bi pozadina iza nje ostala dostupna
   // Tabu i čitaču ekrana iako je vizuelno prekrivena.
+  //
+  // Meni sam upravlja svojim `inert` (`inert={!otvoren}` u Meni.tsx) — dok
+  // je meni zatvoren, on je već inert, namjerno, jer bi mu inače pet
+  // linkova bilo dostižno Tabom na svakoj stranici. Zato bilježimo TAČNO
+  // prethodno stanje svakog elementa prije nego što ga dotaknemo i poslije
+  // vraćamo baš to stanje — po elementu, ne grupno — nikad slijepo skidamo
+  // `inert` sa nečega što ga je već samo nosilo.
   useLayoutEffect(() => {
+    if (gotovo) return
+
     const rod = roditelj.current
     if (!rod) return
 
     const braca = Array.from(rod.children).filter((el) => el !== scope.current)
-
-    if (gotovo) {
-      braca.forEach((el) => el.removeAttribute('inert'))
-      return
-    }
+    const vecBioInertan = new Set(braca.filter((el) => el.hasAttribute('inert')))
 
     braca.forEach((el) => el.setAttribute('inert', ''))
 
     return () => {
-      braca.forEach((el) => el.removeAttribute('inert'))
+      braca.forEach((el) => {
+        if (!vecBioInertan.has(el)) el.removeAttribute('inert')
+      })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gotovo])
 
   if (gotovo) return null
@@ -131,6 +137,11 @@ export function Preloader() {
     <div ref={scope} className="fixed inset-0 z-[99999]" aria-hidden="true">
       <div data-zavjesa className="flex h-full w-full flex-col items-center justify-center bg-black">
         <div data-mark className="relative">
+          {/*
+            Ovaj SVG je privremen. Kad stigne produkcijski monogram iz Logo
+            Guide-a §8, zamijeni `path` podatke — animacija ostaje ista jer
+            radi nad svim `path` elementima.
+          */}
           <svg data-crtez viewBox="0 0 120 120" className="h-[14vw] w-[14vw] max-md:h-[40vw] max-md:w-[40vw]">
             {/* N */}
             <path d="M35 82 L35 38 L62 72 L62 38" stroke="#F5F5F3" strokeWidth="4" fill="none" strokeLinecap="square" />
