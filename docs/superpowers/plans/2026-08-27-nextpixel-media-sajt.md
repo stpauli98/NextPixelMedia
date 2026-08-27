@@ -2033,14 +2033,18 @@ function UgaoVizira({ className }: { className: string }) {
 }
 
 export function Vizir() {
-  const scope = useGsap<HTMLElement>((mm) => {
+  // trigger je `korijen`, ne selektor. Selektori unutar gsap.context traže
+  // POTOMKE scope elementa, pa '[data-vizir]' — koji stoji na samom scope
+  // korijenu — nikad ne bi pogodio. ScrollTrigger bi tiho pao na cijeli
+  // dokument i sekcija bi se okidala na pogrešnom mjestu.
+  const scope = useGsap<HTMLElement>((mm, korijen) => {
     mm.add(BEZ_REDUKCIJE, () => {
       gsap.from('[data-vizir-okvir]', {
         scale: 0.9,
         opacity: 0,
         duration: 1,
         ease: 'power2.out',
-        scrollTrigger: { trigger: '[data-vizir]', start: 'top 70%' },
+        scrollTrigger: { trigger: korijen, start: 'top 70%' },
       })
     })
   })
