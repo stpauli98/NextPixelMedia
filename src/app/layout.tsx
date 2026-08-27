@@ -21,9 +21,20 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'NextPixel Media — foto, video i dron produkcija',
+  metadataBase: new URL('https://nextpixel.media'),
+  title: {
+    default: 'NextPixel Media — foto, video i dron produkcija',
+    template: '%s',
+  },
   description:
-    'Sadržaj za firme, nekretnine i događaje. Gradiška, Banja Luka i okolina.',
+    'Sadržaj za firme, nekretnine i događaje. Gradiška, Banja Luka i okolina. Prvi izbor fotografija za 48 sati.',
+  openGraph: {
+    type: 'website',
+    locale: 'bs_BA',
+    siteName: 'NextPixel Media',
+    url: 'https://nextpixel.media',
+  },
+  robots: { index: true, follow: true },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
