@@ -10,21 +10,29 @@ export function Rokovi() {
           {tekstovi.rokoviNaslov}
         </h2>
 
-        {tekstovi.rokoviNaljepnice.map((naljepnica, i) => (
-          <span
-            key={naljepnica}
-            className="absolute bg-champagne px-[0.6vw] py-[0.2vw] max-md:px-[2.5vw] max-md:py-[1vw] font-body text-[0.85vw] max-md:text-[3vw] uppercase tracking-[0.08em] text-black"
-            style={{ top: `${25 + i * 26}%`, left: `${12 + i * 26}%`, transform: `rotate(${i % 2 ? 2 : -2}deg)` }}
-          >
-            {naljepnica}
-          </span>
-        ))}
+        {tekstovi.rokoviNaljepnice.map((naljepnica, i) => {
+          const positions = [
+            { top: 25, left: 12 },
+            { top: 51, left: 32 },
+            { top: 77, left: 48 },
+          ]
+          const pos = positions[i] || { top: 25, left: 12 }
+          return (
+            <span
+              key={naljepnica}
+              className="absolute bg-champagne px-[0.6vw] py-[0.2vw] max-md:px-[2.5vw] max-md:py-[1vw] font-body text-[0.85vw] max-md:text-[3vw] uppercase tracking-[0.08em] text-black"
+              style={{ top: `${pos.top}%`, left: `${pos.left}%`, transform: `rotate(${i % 2 ? 2 : -2}deg)` }}
+            >
+              {naljepnica}
+            </span>
+          )
+        })}
       </div>
 
       <div className="mt-[5vw] max-md:mt-[14vw] grid grid-cols-4 gap-[2vw] max-md:grid-cols-2 max-md:gap-[8vw] border-t border-dashed border-black/25 pt-[3vw] max-md:pt-[10vw]">
         {rokovi.map((rok) => (
-          <div key={rok.vrijednost} className="[&_span:last-child]:text-black/60">
-            <Broj vrijednost={rok.vrijednost} opis={rok.opis} />
+          <div key={rok.vrijednost}>
+            <Broj vrijednost={rok.vrijednost} opis={rok.opis} naSvijetloj />
           </div>
         ))}
       </div>

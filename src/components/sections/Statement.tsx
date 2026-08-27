@@ -26,7 +26,7 @@ export function Statement() {
     <section ref={scope} className="w-full bg-cream px-[4vw] py-[8vw] max-md:px-[6vw] max-md:py-[18vw]">
       <p data-statement className="naslov max-w-[70vw] max-md:max-w-none text-[4vw] max-md:text-[8.5vw] text-black">
         {tekstovi.statement.prvi}{' '}
-        <span className="text-champagne">{tekstovi.statement.naglasak}</span>{' '}
+        <span className="text-navy">{tekstovi.statement.naglasak}</span>{' '}
         {tekstovi.statement.drugi}
       </p>
     </section>
