@@ -7,7 +7,7 @@ import { tekstovi } from '@/content/tekstovi'
 export function Statement() {
   const scope = useGsap<HTMLElement>((mm) => {
     mm.add(BEZ_REDUKCIJE, () => {
-      const split = new SplitText('[data-statement]', { type: 'lines', linesClass: 'linija' })
+      const split = new SplitText('[data-statement]', { type: 'lines', linesClass: 'linija', mask: 'lines' })
 
       gsap.from(split.lines, {
         yPercent: 110,

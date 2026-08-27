@@ -26,7 +26,7 @@ export function Hero() {
   })
 
   return (
-    <header ref={scope} data-hero className="relative h-[200vh] w-full">
+    <header ref={scope} data-hero className="relative h-[200vh] w-full motion-reduce:h-screen">
       <div data-hero-ekran className="relative h-screen w-full overflow-hidden">
         <Image
           src={slika('hero', 1920, 1080)}
@@ -37,9 +37,9 @@ export function Hero() {
 
         <div data-hero-naslov className="absolute inset-0 flex flex-col justify-center px-[4vw] max-md:px-[6vw]">
           <h1 className="naslov text-[9vw] max-md:text-[15vw] text-white">
-            NextPixel<span className="text-champagne">.</span>
+            {tekstovi.hero.marka.prvi}<span className="text-champagne">.</span>
             <br />
-            Media
+            {tekstovi.hero.marka.drugi}
           </h1>
           <p className="mt-[1.5vw] max-md:mt-[5vw] font-body text-[1.1vw] max-md:text-[4vw] uppercase tracking-[0.2em] text-champagne">
             {tekstovi.hero.podnaslov}
@@ -50,7 +50,7 @@ export function Hero() {
         </div>
 
         <span className="absolute bottom-[2vw] left-[4vw] max-md:bottom-[6vw] max-md:left-[6vw] font-body text-[0.75vw] max-md:text-[3vw] uppercase tracking-[0.2em] text-white/60">
-          ↓ Scroll
+          {tekstovi.hero.scroll}
         </span>
       </div>
     </header>
