@@ -23,6 +23,24 @@ export const tekstovi = {
   oNama: 'NextPixel Media je media strana NextPixel-a. .dev gradi sajt — mi snimamo ono što na njemu stoji.',
   kontaktHero: 'Dobro došao. Da se upoznamo.',
   kontaktObecanje: 'Javljam se u roku od dva sata.',
+  kontaktForma: {
+    labela: 'Razgovor',
+    metaOpis: 'Pošalji upit za snimanje. Javljamo se u roku od dva sata.',
+    brojevi: ['01', '02', '03', '04', '05', '06'],
+    sta: { legenda: 'Šta ti treba', naslov: 'Šta ti treba?' },
+    polja: {
+      ime: 'Ime i prezime ili firma',
+      kontakt: 'Email ili telefon',
+      kadaGdje: 'Kada i gdje',
+    },
+    gdje: { legenda: 'Gdje ćeš koristiti materijal', naslov: 'Gdje ćeš koristiti materijal?' },
+    poruka: 'Poruka',
+    placeholder: 'Upiši',
+    saljem: 'Šaljem…',
+    posalji: 'Pošalji',
+    greska: 'Slanje nije uspjelo. Pošalji direktno na',
+    primljeno: 'Primljeno.',
+  },
   chrome: {
     nav: {
       cta: 'Započni projekat',
