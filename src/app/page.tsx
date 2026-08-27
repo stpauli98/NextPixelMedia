@@ -8,6 +8,9 @@ import { Proces } from '@/components/sections/Proces'
 import { Citat } from '@/components/sections/Citat'
 import { TriUsluge } from '@/components/sections/TriUsluge'
 import { GalerijaCTA } from '@/components/sections/GalerijaCTA'
+import { Rokovi } from '@/components/sections/Rokovi'
+import { Testimonijali } from '@/components/sections/Testimonijali'
+import { CTA } from '@/components/sections/CTA'
 
 export default function Pocetna() {
   return (
@@ -22,6 +25,9 @@ export default function Pocetna() {
       <Citat />
       <TriUsluge />
       <GalerijaCTA />
+      <Rokovi />
+      <Testimonijali />
+      <CTA />
     </main>
   )
 }
