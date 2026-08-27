@@ -4,7 +4,7 @@ import { tekstovi } from '@/content/tekstovi'
 
 export function Footer() {
   return (
-    <footer className="w-full bg-black px-[4vw] pt-[5vw] pb-[2vw] max-md:px-[6vw] max-md:pt-[14vw] max-md:pb-[8vw]">
+    <footer className="isolate w-full bg-black px-[4vw] pt-[5vw] pb-[2vw] max-md:px-[6vw] max-md:pt-[14vw] max-md:pb-[8vw]">
       <div className="flex items-start justify-between gap-[4vw] max-md:flex-col max-md:gap-[10vw]">
         <h2 className="naslov text-[9vw] max-md:text-[16vw] leading-[0.8] text-white">
           NextPixel<span className="text-champagne">.</span>

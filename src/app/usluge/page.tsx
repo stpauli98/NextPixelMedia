@@ -35,9 +35,11 @@ export default function Usluge() {
         </div>
       </header>
 
-      {usluge.map((u, i) => (
-        <PinPanel key={u.broj} usluga={u} ukupno={usluge.length} redoslijed={i + 1} />
-      ))}
+      <div className="isolate">
+        {usluge.map((u, i) => (
+          <PinPanel key={u.broj} usluga={u} ukupno={usluge.length} redoslijed={i + 1} />
+        ))}
+      </div>
 
       <Paketi />
     </main>

@@ -5,7 +5,7 @@ import { tekstovi } from '@/content/tekstovi'
 
 export function Paketi() {
   return (
-    <section className="relative z-10 w-full bg-cream px-[4vw] py-[7vw] max-md:px-[6vw] max-md:py-[16vw]">
+    <section className="isolate w-full bg-cream px-[4vw] py-[7vw] max-md:px-[6vw] max-md:py-[16vw]">
       <Labela className="text-black/60">{tekstovi.paketi.labela}</Labela>
       <h2 className="naslov mt-[1vw] max-md:mt-[4vw] text-[4vw] max-md:text-[10vw] text-black">
         {tekstovi.paketi.naslov}
