@@ -47,7 +47,13 @@ export function Vizir() {
 
         <div className="relative aspect-video w-full overflow-hidden">
           {jePlaceholder ? (
-            <Image src={slika('vizir', 1600, 900)} alt={tekstovi.vizir.alt} fill sizes="72vw" className="object-cover" />
+            <Image
+              src={slika('vizir', 1600, 900)}
+              alt={tekstovi.vizir.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 72vw"
+              className="object-cover"
+            />
           ) : (
             <video
               src={video('vizir')}
