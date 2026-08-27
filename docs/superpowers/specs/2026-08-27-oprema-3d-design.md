@@ -33,16 +33,30 @@
 
 ## 3. Raspored
 
-| Panel | Model | Osnov |
-|---|---|---|
-| 01 Sadržaj za firme | Gimbal | Podjela uloga za B2B: „video + gimbal + dron" |
-| 02 Nekretnine | — | Kamera je otišla na 06; nekretnine ostaju bez |
-| 03 Dron | DJI Mini 4 Pro | Usluga jeste dron |
-| 04 Eventi i proslave | Insta360 | Procjena, nije izvedeno iz shot liste |
-| 05 Sport i turniri | GoPro Hero 11 | Procjena, nije izvedeno iz shot liste |
-| 06 Sajt i sadržaj | Canon R6 | Kamera predstavlja sadržajnu polovinu paketa |
+| Panel | Model | Autor | Licenca |
+|---|---|---|---|
+| 01 Sadržaj za firme | DJI Osmo Mobile SE | pdcarry1995 | CC BY |
+| 02 Nekretnine | — | | |
+| 03 Dron | DJI FPV | SDC | CC BY |
+| 04 Eventi i proslave | Insta360 One X2 | Shift4cube | CC BY |
+| 05 Sport i turniri | GoPro HERO 11 | SkyForceRC | CC BY |
+| 06 Sajt i sadržaj | Canon EOS R6 Mark II | polyman Studio | CC BY |
 
-Pet modela, pet panela, bez ponavljanja.
+Pet modela, pet panela, bez ponavljanja. Svi pod CC BY — atribucija je obavezna, vidi §5.
+
+### Odstupanja od stvarne opreme — svjesna
+
+Prvi izbor modela nije prošao provjeru licenci: četiri od pet nisu bila preuzimljiva sa Sketchfaba, a jedan (DJI Mini 4 Pro) bio je tuđi fajl uzet sa DJI-jevog zvaničnog servera i prekačen bez prava. Zamjene su birane među modelima koji jesu preuzimljivi i pod CC0 ili CC BY.
+
+| Stvarna oprema | Model na sajtu | Razlika |
+|---|---|---|
+| DJI Mini 4 Pro | DJI FPV | **Drugi proizvod** — trkački dron. Odluka naručioca. |
+| Canon R6 | Canon R6 Mark II | Novija generacija istog tijela |
+| GoPro Hero 11 | GoPro HERO 11 | Poklapa se |
+| Insta360 | Insta360 One X2 | Poklapa se |
+| „DJI Gimbal" | DJI Osmo Mobile SE | Gimbal **za telefon** — provjeriti da li odgovara stvarnoj opremi |
+
+**Modeli nemaju natpise s nazivom.** Panel prikazuje opremu uz uslugu ilustrativno; sajt nigdje ne tvrdi koji tačno model studio posjeduje. To je razlika između ilustracije i netačne tvrdnje, i razlog zašto odstupanje u dronu ne krši pravilo o neizmišljanju — ali je zabilježeno da se zna da je svjesno.
 
 > **Zabilježeno:** Canon R6 je nova oprema koja ne postoji u `docs/brend/NextPixel Media - Produkcijski Proces.md`. Taj dokument u §7.1 izvodi ograničenja („ne prihvatati mračne sale i vjenčanja") iz APS-C senzora Canona R10. S full-frame R6 ta računica pada. Sajt ne pominje opremu ni ograničenja, pa nijedna tvrdnja na njemu nije netačna — ali interni dokument treba osvježiti jer iz njega slijede odluke koje poslove studio prima.
 
@@ -159,11 +173,11 @@ Modeli žive u `public/modeli/`.
 
 ## 11. Preduslovi
 
-| # | Šta | Bez toga |
-|---|---|---|
-| 1 | Pet modela sa provjerenim licencama | Ništa ne ulazi u repo |
-| 2 | Zamjena za svaki CC BY-NC model | Taj panel ostaje bez opreme |
-| 3 | Potvrda za panele 04 i 05 | Sajt bi tvrdio praksu koja nije potvrđena |
+| # | Šta | Bez toga | Status |
+|---|---|---|---|
+| 1 | Pet modela sa provjerenim licencama | Ništa ne ulazi u repo | ✅ riješeno, svi CC BY |
+| 2 | Potvrda da je gimbal za telefon prava oprema | Panel 01 prikazuje pogrešnu vrstu gimbala | ⏳ čeka naručioca |
+| 3 | Potvrda za panele 04 i 05 | Sajt povezuje opremu s uslugom bez osnova u shot listama | ⏳ čeka naručioca |
 
 ---
 
