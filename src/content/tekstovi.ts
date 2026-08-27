@@ -30,6 +30,16 @@ export const tekstovi = {
   },
   footerKartica: { naslov: 'Treba ti i sajt?', link: 'nextpixel.dev' },
   uslugeHero: 'Jedna ekipa. Svaki kadar. Svaki format.',
+  usluge: {
+    naslov: 'Naše usluge',
+    ukljuceno: 'Šta je uključeno',
+  },
+  paketi: {
+    labela: 'Paketi za firme',
+    naslov: 'Tri paketa. Srednji pokriva većinu.',
+    valuta: 'KM',
+    napomena: 'Cijene su za zonu Gradiška +30 km. Banja Luka i Prijedor: +50 KM.',
+  },
   radoviHero: { naslov: 'Naš rad.', opis: 'Izbor onoga što smo snimili.' },
   oNama: 'NextPixel Media je media strana NextPixel-a. .dev gradi sajt — mi snimamo ono što na njemu stoji.',
   kontaktHero: 'Dobro došao. Da se upoznamo.',
