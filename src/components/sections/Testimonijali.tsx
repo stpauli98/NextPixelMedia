@@ -11,7 +11,7 @@ export function Testimonijali() {
           <figure key={t.ime} className="border border-dashed border-black/25 p-[2vw] max-md:p-[6vw]">
             <blockquote className="naslov text-[2vw] max-md:text-[6vw] text-black">{t.citat}</blockquote>
             <figcaption className="mt-[1.5vw] max-md:mt-[5vw]">
-              <Labela className="!text-black/60">{t.ime} — {t.uloga}</Labela>
+              <Labela naSvijetloj>{t.ime} — {t.uloga}</Labela>
             </figcaption>
           </figure>
         ))}

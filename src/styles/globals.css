@@ -35,3 +35,13 @@ html {
   letter-spacing: -0.05em;
   line-height: 0.85;
 }
+
+/* MarqueeSlika i Proces animiraju preko inline style (CSS keyframes, ne
+   GSAP), pa ne prolaze kroz useGsap-ov motion gate. Ovo je jedino mjesto
+   koje zaustavlja te dvije beskonačne trake za posjetioce sa isključenim
+   pokretom. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-traka {
+    animation-play-state: paused !important;
+  }
+}

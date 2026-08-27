@@ -5,8 +5,14 @@ import { tekstovi } from '@/content/tekstovi'
 
 export function Paketi() {
   return (
+    // isolate: dio je iste grupe crtanja kao PinPanel wrapper (usluge/page.tsx)
+    // i Footer. Fiksno pozicionirani PinPanel-i se oslanjaju na to da svaki
+    // stacking-kontekst siblings iscrtava po redu bez obzira na DOM poziciju —
+    // ako se ijedan od ova tri isolate ukloni, ili se doda nova statična
+    // sekcija između njih bez isolate, ta sekcija će se iscrtati ispod panela
+    // i nestati, bez greške u konzoli.
     <section className="isolate w-full bg-cream px-[4vw] py-[7vw] max-md:px-[6vw] max-md:py-[16vw]">
-      <Labela className="text-black/60">{tekstovi.paketi.labela}</Labela>
+      <Labela naSvijetloj>{tekstovi.paketi.labela}</Labela>
       <h2 className="naslov mt-[1vw] max-md:mt-[4vw] text-[4vw] max-md:text-[10vw] text-black">
         {tekstovi.paketi.naslov}
       </h2>

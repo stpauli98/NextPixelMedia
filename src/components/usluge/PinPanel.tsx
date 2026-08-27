@@ -55,7 +55,12 @@ export function PinPanel({ usluga, ukupno, redoslijed }: { usluga: Usluga; ukupn
           </span>
 
           <div className="flex-1 border-l border-white/20 pl-[2vw] max-md:border-l-0 max-md:pl-0">
-            <h2 className="naslov text-[2.4vw] max-md:text-[8vw] text-white">{usluga.naziv}</h2>
+            <p className="font-body text-[0.85vw] max-md:text-[3.2vw] uppercase tracking-[0.15em] text-champagne">
+              {usluga.naziv}
+            </p>
+            <h2 className="naslov mt-[0.4vw] max-md:mt-[1.5vw] text-[3.2vw] max-md:text-[10vw] text-white">
+              {usluga.naslov}
+            </h2>
             <p className="mt-[0.8vw] max-md:mt-[3vw] max-w-[26vw] max-md:max-w-none font-body text-[0.9vw] max-md:text-[3.5vw] text-white/75">
               {usluga.opis}
             </p>

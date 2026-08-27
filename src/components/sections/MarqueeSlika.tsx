@@ -10,7 +10,7 @@ export function MarqueeSlika() {
   return (
     <section className="w-full overflow-hidden bg-black py-[2vw] max-md:py-[8vw]">
       <div
-        className="flex w-max gap-[1vw] max-md:gap-[3vw]"
+        className="marquee-traka flex w-max gap-[1vw] max-md:gap-[3vw]"
         style={{ animation: 'marqueeLijevo 40s linear infinite' }}
       >
         {traka.map((rad, i) => (

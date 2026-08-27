@@ -35,6 +35,11 @@ export default function Usluge() {
         </div>
       </header>
 
+      {/* isolate: ovaj wrapper, Paketi i Footer moraju ostati u istoj grupi
+          crtanja. PinPanel-i su fiksno pozicionirani i moraju iscrtavati
+          iznad Paketi-a bez obzira na DOM redoslijed — stacking kontekst to
+          garantuje. Ako se između njih ubaci nova statična sekcija, i ona
+          mora dobiti isolate, inače će nestati ispod ovih panela bez greške. */}
       <div className="isolate">
         {usluge.map((u, i) => (
           <PinPanel key={u.broj} usluga={u} ukupno={usluge.length} redoslijed={i + 1} />

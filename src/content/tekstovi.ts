@@ -4,6 +4,7 @@ export const tekstovi = {
     podnaslov: 'Foto · Video · Dron',
     opis: 'Sadržaj za firme, nekretnine i događaje — Gradiška, Banja Luka i okolina.',
     scroll: '↓ Scroll',
+    alt: 'Kadar iz vazduha, okolina Gradiške',
   },
   statement: {
     prvi: 'Ljudi biraju gdje će jesti, gdje će trenirati i koga će zvati —',

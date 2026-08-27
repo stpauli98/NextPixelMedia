@@ -30,7 +30,7 @@ export function Hero() {
       <div data-hero-ekran className="relative h-screen w-full overflow-hidden">
         <Image
           src={slika('hero', 1920, 1080)}
-          alt="Kadar iz vazduha, okolina Gradiške"
+          alt={tekstovi.hero.alt}
           fill priority sizes="100vw"
           className="object-cover brightness-[0.55]"
         />

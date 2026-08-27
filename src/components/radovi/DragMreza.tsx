@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { gsap, Observer } from '@/lib/gsap'
 import { useGsap } from '@/lib/useGsap'
@@ -34,15 +34,16 @@ const SMJER_TIPKE: Record<string, readonly [number, number]> = {
 export function DragMreza({ stavke }: { stavke: Rad[] }) {
   const pomak = useRef({ x: 0, y: 0 })
   const [jeMobilni, postaviMobilni] = useState(false)
-  // Lijeno čitanje iz window-a već na prvi render (uz SSR stražu) — bez
-  // ovoga minRedova kreće od 0, pa se rijedak filter pri učitavanju vidno
-  // "iskoči" na pravu visinu tek nakon prvog efekta, uz nepotreban
-  // rušenje/podizanje Observer-a, resize i tastature.
-  const [visinaVw, postaviVisinuVw] = useState(() =>
-    typeof window === 'undefined' ? 0 : window.innerHeight / (window.innerWidth / 100),
-  )
+  // Uvijek 0 na prvi render, i na serveru i na klijentu — čitanje iz
+  // window-a već tokom hidratacije (typeof window !== 'undefined' je tačno
+  // i dok se klijent hidrira) izazivalo je razilaženje broja čvorova od
+  // servera. Ispravka dolazi kroz useLayoutEffect ispod, prije bojenja.
+  const [visinaVw, postaviVisinuVw] = useState(0)
 
-  useEffect(() => {
+  // useLayoutEffect (ne useEffect) da se mobilna geometrija ispravi PRIJE
+  // prvog bojenja — inače klijent kratko iscrta desktop raspored pa ga
+  // vidno "popravi" na mobilni odmah zatim.
+  useLayoutEffect(() => {
     const upit = window.matchMedia('(max-width: 767px)')
     const osvjezi = () => postaviMobilni(upit.matches)
     osvjezi()
@@ -52,7 +53,9 @@ export function DragMreza({ stavke }: { stavke: Rad[] }) {
 
   // Visina prozora izražena u vw (relativno prema širini) — koristi se
   // da ploča bude dovoljno visoka i kad filter ostavi svega par stavki.
-  useEffect(() => {
+  // Mora ići u paru sa efektom iznad (isti useLayoutEffect) — da se ispravi
+  // samo jedan od njih, mobilni bi i dalje kratko iscrtao desktop geometriju.
+  useLayoutEffect(() => {
     const osvjezi = () => postaviVisinuVw(window.innerHeight / (window.innerWidth / 100))
     osvjezi()
     window.addEventListener('resize', osvjezi)

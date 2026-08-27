@@ -5,6 +5,8 @@ import { proces } from '@/content/proces'
 import { rokovi } from '@/content/rokovi'
 import { paketi } from '@/content/paketi'
 import { testimonijali } from '@/content/testimonijali'
+import { uslovi } from '@/content/uslovi'
+import { odjeljciPrivatnosti } from '@/content/privatnost'
 
 describe('radovi', () => {
   it('svaki rad ima kategoriju koja postoji', () => {
@@ -63,5 +65,15 @@ describe('paketi', () => {
 describe('testimonijali', () => {
   it('je prazan dok ne stigne prva prava preporuka', () => {
     expect(testimonijali).toHaveLength(0)
+  })
+})
+
+describe('pravni sadržaj', () => {
+  it('uslovi imaju svih 14 tačaka', () => {
+    expect(uslovi).toHaveLength(14)
+  })
+
+  it('privatnost ima svih 6 odjeljaka', () => {
+    expect(odjeljciPrivatnosti).toHaveLength(6)
   })
 })
