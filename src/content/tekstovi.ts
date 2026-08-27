@@ -77,6 +77,9 @@ export const tekstovi = {
     primljeno: 'Primljeno.',
   },
   chrome: {
+    preloader: {
+      fokus: 'Fokus',
+    },
     nav: {
       cta: 'Započni projekat',
       meniOtvori: 'Meni',
