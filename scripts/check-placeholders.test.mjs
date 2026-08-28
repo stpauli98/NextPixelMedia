@@ -40,6 +40,25 @@ describe('provjeriPlaceholdere', () => {
     expect(rezultat.poruka).toContain('pravni savjet')
   })
 
+  it('propušta build uz upozorenje kad je prekidač namjerno upaljen', () => {
+    const rezultat = provjeriPlaceholdere({
+      media: `export const MEDIA_MODE = 'placeholder'`,
+      privatnost: `nije pravni savjet`,
+      dozvoli: true,
+    })
+    expect(rezultat.ok).toBe(true)
+    expect(rezultat.poruka).toContain('UPOZORENJE')
+    // Razlozi moraju ostati vidljivi — prekidač ih ne smije sakriti.
+    expect(rezultat.poruka).toContain('placeholder')
+    expect(rezultat.poruka).toContain('pravni savjet')
+  })
+
+  it('prekidač ne mijenja ništa kad nema šta da se propusti', () => {
+    const rezultat = provjeriPlaceholdere(osnova({ dozvoli: true }))
+    expect(rezultat.ok).toBe(true)
+    expect(rezultat.poruka).not.toContain('UPOZORENJE')
+  })
+
   it('propušta build kad je sve stvarno', () => {
     const rezultat = provjeriPlaceholdere(osnova())
     expect(rezultat.ok).toBe(true)

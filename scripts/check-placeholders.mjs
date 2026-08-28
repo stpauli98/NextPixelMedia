@@ -10,8 +10,13 @@ import { readFileSync } from 'node:fs'
  *
  * Treći razlog — izmišljeni član ekipe "Druga osoba" — otpao je 28.08.2026.
  * kad je drugi član dobio stvarno ime. Zato `ekipa` više nije parametar.
+ *
+ * `dozvoli` je namjeran prekidač (DOZVOLI_PLACEHOLDER=1). Postoji zato što
+ * sajt privremeno stoji na .vercel.app domenu prije nego stigne pravi
+ * materijal. Ne skriva razloge — ispisuje ih kao upozorenje i pušta build.
+ * Default je i dalje blokada; prekidač se mora upaliti rukom.
  */
-export function provjeriPlaceholdere({ media, privatnost }) {
+export function provjeriPlaceholdere({ media, privatnost, dozvoli = false }) {
   const razlozi = []
 
   const podudaranje = media.match(/MEDIA_MODE[^=]*=\s*'(placeholder|real)'/)
@@ -32,10 +37,17 @@ export function provjeriPlaceholdere({ media, privatnost }) {
   }
 
   if (razlozi.length > 0) {
-    return {
-      ok: false,
-      poruka: `Build zaustavljen:\n${razlozi.map((r) => `- ${r}`).join('\n')}`,
+    const spisak = razlozi.map((r) => `- ${r}`).join('\n')
+    if (dozvoli) {
+      return {
+        ok: true,
+        poruka:
+          `UPOZORENJE: DOZVOLI_PLACEHOLDER je upaljen, build prolazi ` +
+          `uprkos ovome:\n${spisak}\nSajt NE SMIJE na nextpixel.media ` +
+          `dok ovo stoji.`,
+      }
     }
+    return { ok: false, poruka: `Build zaustavljen:\n${spisak}` }
   }
 
   return { ok: true, poruka: 'Nema placeholder sadržaja — build može u produkciju.' }
@@ -46,6 +58,7 @@ if (process.argv[1]?.endsWith('check-placeholders.mjs')) {
   const rezultat = provjeriPlaceholdere({
     media: readFileSync('src/lib/media.ts', 'utf8'),
     privatnost: readFileSync('src/content/privatnost.ts', 'utf8'),
+    dozvoli: process.env.DOZVOLI_PLACEHOLDER === '1',
   })
   if (!rezultat.ok) {
     console.error(`\n${rezultat.poruka}\n`)
