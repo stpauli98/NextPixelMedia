@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Montserrat, Poppins } from 'next/font/google'
 import '@/styles/globals.css'
+import { smijeUPretragu } from '@/lib/indeksiranje'
 import { SmoothScroll } from '@/components/layout/SmoothScroll'
 import { Preloader } from '@/components/layout/Preloader'
 import { Nav } from '@/components/layout/Nav'
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     siteName: 'NextPixel Media',
     url: 'https://nextpixel.media',
   },
-  robots: { index: true, follow: true },
+  robots: { index: smijeUPretragu, follow: smijeUPretragu },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
