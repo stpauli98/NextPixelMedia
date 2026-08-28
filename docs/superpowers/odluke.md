@@ -314,3 +314,15 @@ Ruling: pravni tekst se SPAJA sa nextpixel.dev, ne prepisuje doslovno. Izvor je 
 Ruling: ispravljena stvarna netacnost u starom tekstu. Stari privatnost.ts je tvrdio "ne prosljedjujemo trecim licima" dok kontakt forma ide kroz Resend (SAD). To je bila neistina na javnoj stranici, ne stilski propust. Nova sekcija "Kome prosljedjujemo podatke" to imenuje.
 
 Ruling: napomena "nije pravni savjet" OSTAJE, guard i dalje pada na nju. Pola teksta sad dolazi iz njihovog objavljenog dokumenta, ali sekcije o dronu, snimanju djece i arhivi su i dalje moje i niko ih nije pravno pregledao. Build je ionako blokiran zbog MEDIA_MODE, pa zadrzavanje ne kosta nista. Produkcijskih blokera sad ima dva umjesto tri.
+
+=== 28.08.2026. — deploy na Vercel ===
+
+Ruling: guard se veze za Vercel produkcijski build preko VERCEL_ENV. Vercel po defaultu pokrece `npm run build`, ne `build:prod` — guard je na platformi bio ukras. vercel.json sad grana: produkcija kroz build:prod, preview kroz build. Dokazano prije slanja: VERCEL_ENV=production izlaz 1, preview izlaz 0. Odmah se i potvrdilo u praksi — prvi produkcijski deploy je pao tacno na tome.
+
+Ruling: DOZVOLI_PLACEHOLDER=1 kao namjeran prekidac, umjesto skidanja guarda. Korisnik je trazio produkciju na .vercel.app domenu prije nego stigne materijal. Prekidac ne skriva razloge — ispisuje ih kao UPOZORENJE i eksplicitno kaze da sajt ne smije na nextpixel.media dok stoji. Default ostaje blokada. Cijena ako grijesim: neko zaboravi da ga ugasi — zato poruka imenuje pravi domen.
+
+Ruling: noindex se vezuje za MEDIA_MODE, ne za rucni prekidac. Sajt je javan na .vercel.app sa picsum.photos fotografijama kao portfolio. Google to ne smije indeksirati. Vezivanjem za MEDIA_MODE indeksiranje se vraca samo kad stigne pravi materijal — nema drugog koraka koji se moze zaboraviti.
+
+Ruling: uvedeno src/lib/indeksiranje.ts kao jedini izvor odluke o indeksiranju. Prva verzija je mijenjala samo robots.ts, pa je produkcija slala Disallow: / u robots.txt i "index, follow" u meta tagu svake stranice — dvije nezavisne odluke koje su se razisle. Uhvaceno tek citanjem HTML-a sa zivog sajta, ne testom. Sad oboje citaju iz istog modula. Test na layout.tsx ide preko izvora jer se modul ne moze uvesti u node okruzenju (next/font/google).
+
+Zabiljeska: preview deployi su iza Vercel SSO gejta i ne mogu se otvoriti bez logina. Produkcijski alias nije. Zato je produkcija na .vercel.app bila jedini nacin da se sajt uopste vidi.
