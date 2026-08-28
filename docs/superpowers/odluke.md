@@ -304,3 +304,13 @@ Ruling: PinPanel renderuje usluga.naslov. Plan §180-187 specificira kolonu "Nas
 
 Zabiljeska za buduceg citaoca: pocetna ima 13 sekcija, ne 14. Sekcija 14 iz adaptacije (dzinovski wordmark + .dev kartica) implementirana je kao globalni Footer — bolja odluka jer je na svakoj stranici. Nije rupa, ne "vracati".
 === FIX TALAS dispatched (FIX_BASE a0ee3d4) ===
+
+=== 28.08.2026. — Jelena Tomic i pravni tekst ===
+
+Ruling: sentinel 'Druga osoba' se ukida u cijelosti, ne mijenja drugim sentinelom. Drugi clan je dobio stvarno ime (Jelena Tomic), uloga i opis su izvedeni iz njihovog Produkcijskog Procesa §2.2 (Osoba B: foto — detalji, portreti, proizvod; reakcije i gosti; atmosfera i publika), ne izmisljeni. Time otpada i filter u o-nama/page.tsx i treci razlog u check-placeholders.mjs — `ekipa` vise nije parametar guarda. Slika ostaje placeholder, ali nju vec pokriva MEDIA_MODE, pa nema rupe. Cijena ako grijesim: uloga je izvedena iz procesnog dokumenta a ne iz njenih rijeci — ako se ne slaze sa opisom, to je jedan string u ekipa.ts.
+
+Ruling: pravni tekst se SPAJA sa nextpixel.dev, ne prepisuje doslovno. Izvor je Next-Pixel-NJS/src/locales/sr/legal.json — isto pravno lice, ista adresa, vec na srpskom. Preuzeto: kontrolor, pravni osnov, prava, rokovi, nadzorno tijelo (Agencija za zastitu licnih podataka u BiH), Resend kao obradjivac. NIJE preuzeto: kolacici, Google Analytics, Meta Pixel — ovaj sajt ih nema (provjereno: jedina vanjska usluga u src/ je Resend), pa bi prepisivanje bilo objavljivanje obrade koja se ne desava. Iz impresuma izbaceni § 55 Abs. 2 RStV i EU ODR platforma — njemacki propis, ne vazi za firmu u BiH. Cijena ako grijesim: sajt tvrdi manje obrade nego sto radi — ali provjera koda kaze suprotno.
+
+Ruling: ispravljena stvarna netacnost u starom tekstu. Stari privatnost.ts je tvrdio "ne prosljedjujemo trecim licima" dok kontakt forma ide kroz Resend (SAD). To je bila neistina na javnoj stranici, ne stilski propust. Nova sekcija "Kome prosljedjujemo podatke" to imenuje.
+
+Ruling: napomena "nije pravni savjet" OSTAJE, guard i dalje pada na nju. Pola teksta sad dolazi iz njihovog objavljenog dokumenta, ali sekcije o dronu, snimanju djece i arhivi su i dalje moje i niko ih nije pravno pregledao. Build je ionako blokiran zbog MEDIA_MODE, pa zadrzavanje ne kosta nista. Produkcijskih blokera sad ima dva umjesto tri.

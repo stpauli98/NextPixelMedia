@@ -1,5 +1,5 @@
 import { Labela } from '@/components/ui/Labela'
-import { odjeljciPrivatnosti, napomenaPrivatnost } from '@/content/privatnost'
+import { odjeljciPrivatnosti, napomenaPrivatnost, azuriranoPrivatnost } from '@/content/privatnost'
 import { tekstovi } from '@/content/tekstovi'
 
 export const metadata = {
@@ -12,6 +12,10 @@ export default function Privatnost() {
     <main className="px-[4vw] pt-[10vw] pb-[6vw] max-md:px-[6vw] max-md:pt-[30vw] max-md:pb-[14vw]">
       <Labela>{tekstovi.privatnostStranica.labela}</Labela>
       <h1 className="naslov mt-[1vw] max-md:mt-[4vw] text-[4vw] max-md:text-[10vw] text-white">{tekstovi.privatnostStranica.naslov}</h1>
+
+      <p className="mt-[1vw] max-md:mt-[4vw] font-body text-[0.8vw] max-md:text-[3vw] text-gray">
+        {azuriranoPrivatnost}
+      </p>
 
       <dl className="mt-[4vw] max-md:mt-[12vw] max-w-[55vw] max-md:max-w-none">
         {odjeljciPrivatnosti.map((o) => (

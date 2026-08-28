@@ -3,10 +3,9 @@ import { provjeriPlaceholdere } from './check-placeholders.mjs'
 
 const STVARNI_MEDIA = `export const MEDIA_MODE: 'placeholder' | 'real' = 'real'`
 const CISTA_PRIVATNOST = `export const napomenaPrivatnost = 'Tekst je pregledan kod pravnika.'`
-const CISTA_EKIPA = `export const ekipa = [{ ime: 'Nikola Milošević' }]`
 
 function osnova(izmjene = {}) {
-  return { media: STVARNI_MEDIA, privatnost: CISTA_PRIVATNOST, ekipa: CISTA_EKIPA, ...izmjene }
+  return { media: STVARNI_MEDIA, privatnost: CISTA_PRIVATNOST, ...izmjene }
 }
 
 describe('provjeriPlaceholdere', () => {
@@ -31,22 +30,14 @@ describe('provjeriPlaceholdere', () => {
     expect(rezultat.poruka).toContain('pravni savjet')
   })
 
-  it('obara build kad ekipa.ts i dalje sadrži "Druga osoba"', () => {
-    const rezultat = provjeriPlaceholdere(osnova({ ekipa: `ime: 'Druga osoba'` }))
-    expect(rezultat.ok).toBe(false)
-    expect(rezultat.poruka).toContain('Druga osoba')
-  })
-
   it('imenuje sve razloge odjednom kad ih ima više', () => {
     const rezultat = provjeriPlaceholdere({
       media: `export const MEDIA_MODE = 'placeholder'`,
       privatnost: `nije pravni savjet`,
-      ekipa: `ime: 'Druga osoba'`,
     })
     expect(rezultat.ok).toBe(false)
     expect(rezultat.poruka).toContain('placeholder')
     expect(rezultat.poruka).toContain('pravni savjet')
-    expect(rezultat.poruka).toContain('Druga osoba')
   })
 
   it('propušta build kad je sve stvarno', () => {

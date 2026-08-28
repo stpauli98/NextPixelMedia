@@ -8,9 +8,9 @@ export const ekipa: Clan[] = [
     slikaId: 'ekipa-nikola',
   },
   {
-    ime: 'Druga osoba',
-    uloga: 'Snimanje i organizacija',
-    opis: 'Drugo tijelo na lokaciji, detalji i portreti, dogovor s klijentom.',
-    slikaId: 'ekipa-druga',
+    ime: 'Jelena Tomić',
+    uloga: 'Fotografija i drugi kadar',
+    opis: 'Foto na terenu — detalji, portreti, proizvod. Na događajima reakcije i gosti.',
+    slikaId: 'ekipa-jelena',
   },
 ]

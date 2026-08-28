@@ -11,13 +11,6 @@ export const metadata = {
   description: 'Dvoje ljudi, jedan do dva posla mjesečno, i proces koji se ne preskače.',
 }
 
-// 'Druga osoba' je sentinel u src/content/ekipa.ts, ne pravi član tima —
-// studio jesu dvoje ljudi, ali ime i opis tog drugog nisu njihovi, pa se ne
-// izmišljaju. Ista logika kao prazan niz testimonijali: dok ne stigne pravi
-// podatak, taj unos postoji u sadržaju (i za scripts/check-placeholders.mjs)
-// ali se ne renderuje.
-const kompletnaEkipa = ekipa.filter((clan) => clan.ime !== 'Druga osoba')
-
 export default function ONama() {
   return (
     <main className="px-[4vw] pt-[10vw] pb-[6vw] max-md:px-[6vw] max-md:pt-[30vw] max-md:pb-[14vw]">
@@ -47,7 +40,7 @@ export default function ONama() {
       <section className="mt-[7vw] max-md:mt-[18vw]">
         <Labela>{tekstovi.oNamaStranica.labelaEkipa}</Labela>
         <div className="mt-[2vw] max-md:mt-[6vw] grid grid-cols-2 gap-[2vw] max-md:grid-cols-1 max-md:gap-[8vw]">
-          {kompletnaEkipa.map((clan) => (
+          {ekipa.map((clan) => (
             <article key={clan.slikaId}>
               <div className="relative h-[24vw] max-md:h-[80vw] w-full overflow-hidden">
                 <Image src={slika(clan.slikaId, 800, 1000)} alt={clan.ime} fill sizes="(max-width: 768px) 100vw, 45vw" className="object-cover grayscale" />

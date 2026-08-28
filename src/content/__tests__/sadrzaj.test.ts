@@ -7,6 +7,7 @@ import { paketi } from '@/content/paketi'
 import { testimonijali } from '@/content/testimonijali'
 import { uslovi } from '@/content/uslovi'
 import { odjeljciPrivatnosti } from '@/content/privatnost'
+import { ekipa } from '@/content/ekipa'
 
 describe('radovi', () => {
   it('svaki rad ima kategoriju koja postoji', () => {
@@ -73,7 +74,26 @@ describe('pravni sadržaj', () => {
     expect(uslovi).toHaveLength(14)
   })
 
-  it('privatnost ima svih 6 odjeljaka', () => {
-    expect(odjeljciPrivatnosti).toHaveLength(6)
+  it('privatnost ima svih 12 odjeljaka', () => {
+    expect(odjeljciPrivatnosti).toHaveLength(12)
+  })
+})
+
+describe('ekipa', () => {
+  // Do 28.08.2026. drugi clan je bio sentinel 'Druga osoba' koji je
+  // /o-nama filtrirao iz prikaza. Sad su oba clana stvarna, pa svaki
+  // unos mora biti kompletan — nema unosa koji se tiho ne renderuje.
+  it('svaki clan ima popunjena sva polja', () => {
+    expect(ekipa).toHaveLength(2)
+    for (const clan of ekipa) {
+      expect(clan.ime.trim()).not.toBe('')
+      expect(clan.uloga.trim()).not.toBe('')
+      expect(clan.opis.trim()).not.toBe('')
+      expect(clan.slikaId.trim()).not.toBe('')
+    }
+  })
+
+  it('nema vise izmisljenih clanova', () => {
+    expect(ekipa.map((c) => c.ime)).not.toContain('Druga osoba')
   })
 })
